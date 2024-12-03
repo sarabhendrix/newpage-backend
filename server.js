@@ -132,8 +132,6 @@ app.post("/api/books", upload.single("img"), (req, res) => {
 
 app.put("/api/books/:id", upload.single("img"), (req, res) => {
     const book = books.find((h) => h._id === parseInt(req.params.id));
-    console.log(req.params.id)
-    console.log(book);
     if (!book){
       res.status(404).send("Book with given id was not found");
       return;
@@ -155,8 +153,20 @@ app.put("/api/books/:id", upload.single("img"), (req, res) => {
     }
   
     res.send(book);
-  });
+});
   
+app.delete("/api/books/:id", (req, res) => {
+  const book = books.find((h) => h._id === parseInt(req.params.id));
+
+  if (!book){
+    res.status(404).send("Book with given id was not found");
+    return;
+  } 
+
+  const index = books.indexOf(book);
+  books.splice(index, 1);
+  res.send(book);
+});
 
 const validateBook = (book) => {
     const schema = Joi.object({
